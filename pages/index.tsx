@@ -14,16 +14,18 @@ const Home = () => {
     if (!file) return null;
     // @ts-ignore
     const fileType = encodeURIComponent(file.type);
-     // @ts-ignore
+    // @ts-ignore
     const fileName = encodeURIComponent(file.name);
-    const { data } = await axios.get(`/api/media?fileType=${fileType}&fileName=${fileName}`);
+    const { data } = await axios.get(
+      `/api/media?fileType=${fileType}&fileName=${fileName}`
+    );
     const { uploadUrl } = data;
 
     await axios.put(uploadUrl, file);
     setFileName(null);
     setUploadMessage(true);
     setTimeout(() => {
-      setUploadMessage(false)
+      setUploadMessage(false);
     }, 5000);
   };
 
@@ -47,7 +49,7 @@ const Home = () => {
           {!fileName ? "Selecione um relatório e faça o upload" : fileName}
         </h1>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ position: "relative" }}>
         <div className={styles.uploadContainer}>
           <div className={styles.labelContainer}>
             <label className={styles.label} htmlFor="contained-button-file">
@@ -78,10 +80,14 @@ const Home = () => {
             Upload
           </button>
         </div>
+        {uploadMessage ? (
+          <div className={styles.successMessage}>
+            <h1 className={styles.successTitle} style={{ textWrap: "nowrap" }}>
+              Upload feito com sucesso!
+            </h1>
+          </div>
+        ) : null}
       </form>
-      <h1 className={styles.title}>
-          {uploadMessage ? "Upload feito com sucesso!" : ""}
-        </h1>
     </main>
   );
 };
